@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.stock.mapper.ProductCategoryMapper">
+
+    <resultMap type="ProductCategory" id="ProductCategoryResult">
+        <result property="id" column="id"/>
+        <result property="categoryCode" column="category_code"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="selectProductCategoryVo">
+        select id, category_code, category_name, status
+        from product_category
+    </sql>
+
+    <!-- 查询商品分类列表 -->
+    <select id="selectList" parameterType="ProductCategory" resultMap="ProductCategoryResult">
+        <include refid="selectProductCategoryVo"/>
+        <where>
+            <if test="categoryCode != null and categoryCode != ''">
+                AND category_code = #{categoryCode}
+            </if>
+            <if test="categoryName != null and categoryName != ''">
+                AND category_name like concat('%', #{categoryName}, '%')
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <!-- 根据分类编码查询 -->
+    <select id="selectByCategoryCode" parameterType="String" resultMap="ProductCategoryResult">
+        <include refid="selectProductCategoryVo"/>
+        where category_code = #{categoryCode}
+        and status = 0
+        limit 1
+    </select>
+
+</mapper>

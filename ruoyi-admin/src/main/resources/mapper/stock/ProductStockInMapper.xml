@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.stock.mapper.ProductStockInMapper">
+
+    <resultMap type="ProductStockIn" id="ProductStockInResult">
+        <result property="id" column="id"/>
+        <result property="productCode" column="product_code"/>
+        <result property="productName" column="product_name"/>
+        <result property="category" column="category"/>
+        <result property="warehouse" column="warehouse"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+    </resultMap>
+
+    <sql id="selectProductStockInVo">
+        select id, product_code, product_name, category, warehouse, remark, create_time, create_by
+        from product_stock_in
+    </sql>
+
+    <!-- 插入入库记录 -->
+    <insert id="insertStockIn" parameterType="ProductStockIn" useGeneratedKeys="true" keyProperty="id">
+        insert into product_stock_in (
+        product_code,
+        product_name,
+        category,
+        warehouse,
+        remark,
+        create_time,
+        create_by
+        ) values (
+        #{productCode},
+        #{productName},
+        #{category},
+        #{warehouse},
+        #{remark},
+        #{createTime},
+        #{createBy}
+        )
+    </insert>
+
+    <!-- 根据商品编码查询入库记录 -->
+    <select id="selectByProductCode" parameterType="String" resultMap="ProductStockInResult">
+        <include refid="selectProductStockInVo"/>
+        where product_code = #{productCode}
+        order by create_time desc
+    </select>
+
+    <!-- 根据商品编码查询最近一次入库记录 -->
+    <select id="selectLastByProductCode" parameterType="String" resultMap="ProductStockInResult">
+        <include refid="selectProductStockInVo"/>
+        where product_code = #{productCode}
+        order by create_time desc
+        limit 1
+    </select>
+
+</mapper>

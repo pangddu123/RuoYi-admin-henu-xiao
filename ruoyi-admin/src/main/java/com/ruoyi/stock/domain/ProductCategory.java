@@ -11,6 +11,6 @@ public class ProductCategory extends BaseEntity {
     @TableId
     private Long categoryId;       // 分类ID
     private String categoryName;   // 分类名称
-    private String categoryCode;   // 分类标识（HUAWEI/NVIDIA）
-    private String status;         // 状态（0正常 1停用）
+    private String categoryCode;   // （HUAWEI/NVIDIA）
+    private String status;         // 状分类标识态（0正常 1停用）
 }
